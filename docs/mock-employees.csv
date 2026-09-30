@@ -1,0 +1,51 @@
+id,name,role,skills,availableHours
+EMP001,Sarah Mitchell,FA,"Requirements Gathering,User Story Writing,JIRA,Agile/Scrum Methodologies,Stakeholder Management",32
+EMP002,James Chen,FA,"Requirements Gathering,Acceptance Criteria Definition,Confluence,Workshop Facilitation,Documentation",40
+EMP003,Priya Naidoo,FA,"User Story Writing,Business Process Mapping,JIRA,Agile/Scrum Methodologies",24
+EMP004,Michael van der Berg,FA,"Requirements Gathering,Stakeholder Management,Confluence,Documentation,Workshop Facilitation",16
+EMP005,Aisha Mokoena,FA,"User Story Writing,Acceptance Criteria Definition,JIRA,Business Process Mapping,Agile/Scrum Methodologies",40
+EMP006,David Sithole,FA,"Requirements Gathering,Documentation,Confluence,JIRA",8
+EMP007,Emma Botha,FA,"Stakeholder Management,Workshop Facilitation,Agile/Scrum Methodologies,User Story Writing",36
+EMP008,Thabo Dlamini,FA,"Requirements Gathering,User Story Writing,Acceptance Criteria Definition,JIRA,Confluence,Business Process Mapping",0
+EMP009,Lisa Pretorius,FA,"Agile/Scrum Methodologies,Documentation,Stakeholder Management,JIRA",28
+EMP010,Ryan Govender,FA,"User Story Writing,Business Process Mapping,Workshop Facilitation,Requirements Gathering,Acceptance Criteria Definition",40
+EMP011,Sophie Williams,UX,"Figma,User Research,Wireframing,Prototyping,Design Systems",40
+EMP012,Daniel Ndlovu,UX,"Figma,Adobe XD,Responsive Design,Accessibility (WCAG),Usability Testing",32
+EMP013,Naledi Khumalo,UX,"Sketch,Wireframing,Prototyping,User Research",24
+EMP014,Chris van Wyk,UX,"Figma,Design Systems,Responsive Design,Prototyping,Wireframing",40
+EMP015,Zanele Mthembu,UX,"Adobe XD,User Research,Usability Testing,Accessibility (WCAG)",16
+EMP016,Mark Thompson,UX,"Figma,Sketch,Wireframing,Design Systems,Responsive Design,Prototyping",36
+EMP017,Lerato Molefe,UX,"User Research,Prototyping,Figma,Usability Testing",8
+EMP018,Andrew Jacobs,UX,"Figma,Adobe XD,Accessibility (WCAG),Design Systems,Wireframing",40
+EMP019,Nomsa Zwane,UX,"Sketch,Prototyping,Responsive Design,User Research,Wireframing",0
+EMP020,Peter Fourie,UX,"Figma,Usability Testing,Design Systems,User Research,Accessibility (WCAG)",28
+EMP021,Jessica Nkosi,FE,"React,TypeScript,JavaScript,Tailwind CSS,REST API Integration,Git",40
+EMP022,Brandon Pillay,FE,"Angular,TypeScript,HTML5,CSS3,State Management (Redux/Zustand),Unit Testing (Jest/Vitest)",32
+EMP023,Taryn Mbeki,FE,"React,JavaScript,HTML5,CSS3,Git",24
+EMP024,Kevin OBrien,FE,"Vue.js,TypeScript,Tailwind CSS,REST API Integration,Unit Testing (Jest/Vitest),Git",40
+EMP025,Michelle Zulu,FE,"React,Angular,TypeScript,JavaScript,HTML5,CSS3,State Management (Redux/Zustand)",16
+EMP026,Simon Marais,FE,"React,TypeScript,Tailwind CSS,Git,REST API Integration",36
+EMP027,Thandeka Ngcobo,FE,"JavaScript,HTML5,CSS3,Vue.js,Git",8
+EMP028,Grant Peterson,FE,"React,TypeScript,JavaScript,State Management (Redux/Zustand),Unit Testing (Jest/Vitest),REST API Integration,Git",40
+EMP029,Portia Mahlangu,FE,"Angular,TypeScript,HTML5,Tailwind CSS,Git",0
+EMP030,Dylan Erasmus,FE,"React,Vue.js,JavaScript,CSS3,REST API Integration,Git",28
+EMP031,Rebecca Tshabalala,BE,"Node.js,Express.js,PostgreSQL,REST API Design,Docker,Git",40
+EMP032,Jason Venter,BE,"Java,Spring Boot,PostgreSQL,MongoDB,AWS,Unit Testing",32
+EMP033,Lindiwe Maseko,BE,"Node.js,Python,Express.js,MongoDB,REST API Design,Git",24
+EMP034,Matthew du Plessis,BE,"Node.js,TypeScript,Express.js,PostgreSQL,Docker,AWS,Git",40
+EMP035,Sibongile Radebe,BE,"Python,PostgreSQL,REST API Design,Docker,Unit Testing",16
+EMP036,Craig Wessels,BE,"Java,C#/.NET,Spring Boot,PostgreSQL,AWS,Unit Testing,Git",36
+EMP037,Ntombi Shabangu,BE,"Node.js,Express.js,MongoDB,Git",8
+EMP038,Willem Steyn,BE,"Node.js,Python,C++,PostgreSQL,MongoDB,REST API Design,Docker,AWS,Git",40
+EMP039,Grace Mabaso,BE,"Java,Spring Boot,PostgreSQL,Unit Testing,Git",0
+EMP040,Thomas Smit,BE,"Node.js,Express.js,Python,REST API Design,Docker,Git,Unit Testing",28
+EMP041,Amanda Louw,QE,"Test Planning,Test Case Design,Selenium,Postman,API Testing,Bug Tracking",40
+EMP042,Vincent Moyo,QE,"Playwright,Cypress,API Testing,CI/CD Pipelines,Test Automation Frameworks",32
+EMP043,Nosipho Cele,QE,"Test Planning,Selenium,Postman,Regression Testing,Bug Tracking",24
+EMP044,Richard Potgieter,QE,"Test Case Design,Playwright,Performance Testing,CI/CD Pipelines,Test Automation Frameworks",40
+EMP045,Busisiwe Mkhize,QE,"Selenium,Cypress,API Testing,Bug Tracking,Regression Testing",16
+EMP046,Steven Coetzee,QE,"Test Planning,Test Case Design,Postman,API Testing,Performance Testing,CI/CD Pipelines",36
+EMP047,Thandiwe Gumede,QE,"Selenium,Bug Tracking,Regression Testing",8
+EMP048,Johan Meyer,QE,"Test Planning,Playwright,Cypress,Postman,API Testing,Test Automation Frameworks,CI/CD Pipelines",40
+EMP049,Precious Sibiya,QE,"Test Case Design,Selenium,Performance Testing,Bug Tracking",0
+EMP050,Francois Joubert,QE,"Test Planning,Test Case Design,Cypress,API Testing,Regression Testing,Test Automation Frameworks",28

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QE Docs → PDF</title>
+<style>
+  * { box-sizing: border-box; }
+  :root { --ink:#1a1a2e; --muted:#555; --accent:#4a3f9f; --line:#d9d9e3; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink); line-height: 1.5; padding: 24px 40px 60px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .toolbar {
+    position: sticky; top: 0; background: #fff; padding: 12px 0;
+    border-bottom: 1px solid var(--line); margin-bottom: 24px; z-index: 10;
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .toolbar select {
+    font-size: 14px; padding: 8px 14px; border-radius: 8px;
+    border: 1px solid var(--line); background: #fff; cursor: pointer;
+  }
+  .toolbar button {
+    font-size: 14px; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    background: linear-gradient(135deg,#5b4cc4,#7a5fd6); color:#fff; border:none;
+  }
+  .hint { color: var(--muted); font-size: 13px; }
+  h1 { font-size: 24px; border-bottom: 3px solid var(--accent); padding-bottom: 8px; }
+  h2 { font-size: 19px; margin-top: 28px; color: var(--accent); border-bottom:1px solid var(--line); padding-bottom:4px; }
+  h3 { font-size: 15px; margin-top: 18px; }
+  blockquote { border-left: 4px solid var(--accent); margin: 12px 0; padding: 8px 14px; background:#f4f3fb; color:var(--muted); }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f0eef9; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin: 2px 0; }
+  code { background:#f0eef9; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  hr { border:none; border-top:1px solid var(--line); margin: 22px 0; }
+  @media print {
+    .toolbar { display: none; }
+    body { padding: 0; max-width: none; }
+    h2, h3 { page-break-after: avoid; }
+    h3 { page-break-inside: avoid; }
+    table, blockquote { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <label for="doc">Document:</label>
+  <select id="doc">
+    <option value="cases">Delivery Squad — Test Cases</option>
+    <option value="plan">Delivery Squad — Test Plan</option>
+  </select>
+  <button id="printBtn">Save as PDF (Print)</button>
+  <span class="hint">Pick a document → click Save as PDF → choose "Save as PDF" as the destination.</span>
+</div>
+<div id="content"></div>
+
+<!-- Documents are embedded below so this file works by double-clicking (no server needed). -->
+<script id="md-cases" type="text/markdown"># Test Cases: Rapid Assembly of Cross-Functional Delivery Squads
+
+Derived from the EARS requirements document (REQ-001..REQ-057, BR-001..BR-014).
+Format: Given / When / Then. Each case is traced to its source requirement(s).
+
+> Note: Cases touching configured/TBD values (score rounding, workload threshold,
+> tie-break rule, normalization formulas, field lengths, mandatory roles) are marked
+> **[TBD]** and cannot be fully baselined until the Open Decisions (section 10) are resolved.
+
+---
+
+## End-to-End Scenarios
+
+### Positive Scenarios
+
+### TC-E2E-001 Capture new project delivery request — 1 squad member
+- **Given** the Delivery Lead has logged on to the system
+  **and** the new project page is available to capture a new delivery request
+- **When** the Delivery Lead enters a valid project name, valid description, valid urgency, valid start date, and valid end date
+- **Then** the system scores and ranks candidates
+  **And** lists 1 potential squad member
+- **Trace:** REQ-002, REQ-003, REQ-004, REQ-005
+
+### TC-E2E-002 Capture new project delivery request — 5 squad members
+- **Given** the Delivery Lead has logged on to the system
+  **and** the new project page is available to capture a new delivery request
+- **When** the Delivery Lead enters a valid project name, valid description, valid urgency, valid start date, and valid end date
+- **Then** the system scores and ranks candidates
+  **And** lists 5 potential squad members
+- **Trace:** REQ-002, REQ-003, REQ-004, REQ-005
+
+### TC-E2E-003 Capture new project delivery request — 10 (max) squad members
+- **Given** the Delivery Lead has logged on to the system
+  **and** the new project page is available to capture a new delivery request
+- **When** the Delivery Lead enters a valid project name, valid description, valid urgency, valid start date, and valid end date
+- **Then** the system scores and ranks candidates
+  **And** lists 10 potential squad members
+- **Trace:** REQ-002, REQ-003, REQ-004, REQ-005
+
+### Negative Scenarios
+
+### TC-E2E-004 Capture new project delivery request — end date before start date
+- **Given** the Delivery Lead has logged on to the system
+  **and** the new project page is available to capture a new delivery request
+- **When** the Delivery Lead enters a valid project name, valid description, valid urgency, but an end date earlier than the start date
+- **Then** the system treats the duration as invalid and prevents submission
+  **And** identifies the duration field as requiring correction
+- **Trace:** REQ-007, REQ-008
+
+---
+
+## 1. Delivery Request Creation (REQ-001..REQ-008)
+
+### TC-001 Create a delivery request
+- **Given** a Delivery Lead is on the Create Request screen
+- **When** they start a new delivery request
+- **Then** the system allows the request to be created
+- **Trace:** REQ-001
+
+### TC-002 Capture mandatory project fields
+- **Given** a new delivery request
+- **When** the Delivery Lead enters project name, description, urgency, start date, and end date/duration
+- **Then** the system stores each captured value
+- **Trace:** REQ-002, REQ-003, REQ-004, REQ-005
+
+### TC-003 Urgency accepts only Low/Medium/High
+- **Given** a delivery request
+- **When** the Delivery Lead sets urgency
+- **Then** only Low, Medium, or High are selectable
+- **Trace:** REQ-004
+
+### TC-004 Enable submission when all mandatory data valid
+- **Given** valid project information and at least one valid role requirement
+- **When** the Delivery Lead attempts to submit
+- **Then** the system enables submission
+- **Trace:** REQ-006
+
+### TC-005 Prevent submission on missing/invalid project info
+- **Given** a request missing project name, description, urgency, or duration
+- **When** the Delivery Lead attempts to submit
+- **Then** the system prevents submission
+- **Trace:** REQ-007
+
+### TC-006 Identify each field requiring correction
+- **Given** submission was prevented due to invalid data
+- **When** the prevention occurs
+- **Then** the system identifies every field that requires correction
+- **Trace:** REQ-008
+
+### TC-007 End date precedes start date (edge)
+- **Given** a request where the end date is earlier than the start date
+- **When** the Delivery Lead attempts to submit
+- **Then** the duration is treated as invalid, submission is prevented, and the duration field is identified
+- **Trace:** REQ-007, REQ-008 (Section 7 edge case)
+
+---
+
+## 2. Role and Skill Management (REQ-009..REQ-014)
+
+### TC-008 Add one or more role requirements
+- **Given** a delivery request
+- **When** the Delivery Lead adds a role requirement
+- **Then** the system attaches the role requirement to the request (supports multiple)
+- **Trace:** REQ-009
+
+### TC-009 Capture role type/description per role
+- **Given** a role requirement
+- **When** the Delivery Lead enters a role type or role description
+- **Then** the system captures exactly one role type/description for that role
+- **Trace:** REQ-010
+
+### TC-010 Assign one or more skills per role
+- **Given** a role requirement
+- **When** the Delivery Lead assigns required skills
+- **Then** the system associates one or more skills with that role
+- **Trace:** REQ-011
+
+### TC-011 Add Another Role creates separate section
+- **Given** an existing role requirement
+- **When** the Delivery Lead selects Add Another Role
+- **Then** the system creates a separate, independent role requirement section
+- **Trace:** REQ-012
+
+### TC-012 Remove role removes its skills
+- **Given** a role requirement with associated skills
+- **When** the Delivery Lead removes the role
+- **Then** the system removes the role and all its associated skills from the request
+- **Trace:** REQ-013
+
+### TC-013 Prevent submission when a role has no skills
+- **Given** a role requirement with no required skills
+- **When** the Delivery Lead attempts to submit
+- **Then** the system prevents submission and identifies the incomplete role
+- **Trace:** REQ-014 (Section 7 edge case)
+
+### TC-014 No role requirement added (edge)
+- **Given** a request with valid project info but zero role requirements
+- **When** the Delivery Lead attempts to submit
+- **Then** the system prevents submission because at least one role is mandatory
+- **Trace:** REQ-006, REQ-007
+
+---
+
+## 3. Candidate Matching and Scoring (REQ-015..REQ-025, BR-001..BR-004, BR-012)
+
+### TC-015 Evaluate only available candidates on submit
+- **Given** a valid submitted request and a mock employee pool
+- **When** evaluation runs
+- **Then** the system evaluates every candidate marked available
+- **Trace:** REQ-015
+
+### TC-016 Evaluate candidates independently per role
+- **Given** a request with multiple role requirements
+- **When** evaluation runs
+- **Then** each candidate is evaluated separately for each role
+- **Trace:** REQ-016
+
+### TC-017 One suitability score per candidate-role combination
+- **Given** a candidate evaluated against a role
+- **When** scoring completes
+- **Then** exactly one suitability score exists for that candidate-role pair
+- **Trace:** REQ-017
+
+### TC-018 Score uses 60/30/10 weighting
+- **Given** a candidate with known skill match, availability, and workload components
+- **When** the suitability score is calculated
+- **Then** it equals (Skill×60%) + (Availability×30%) + (Workload×10%)
+- **Trace:** REQ-018, BR-001, BR-002, BR-003
+
+### TC-019 Matched skill included in skill-match calc
+- **Given** a candidate possessing a required skill
+- **When** skill match is calculated
+- **Then** that skill is included in the calculation
+- **Trace:** REQ-019
+
+### TC-020 Distinct matched skills counted once
+- **Given** a candidate possessing multiple required skills (including any duplicates)
+- **When** skill match is calculated
+- **Then** each distinct matched required skill is counted exactly once
+- **Trace:** REQ-020, BR-012
+
+### TC-021 Availability above 75% applies configured contribution **[TBD]**
+- **Given** a candidate whose availability exceeds 75%
+- **When** the availability component is scored
+- **Then** the configured availability score contribution is applied
+- **Trace:** REQ-021 (formula TBD — Section 10)
+
+### TC-022 Availability exactly at 75% (boundary) **[TBD]**
+- **Given** a candidate whose availability equals 75%
+- **When** the availability component is scored
+- **Then** the system applies the treatment defined for exactly 75% availability
+- **Trace:** REQ-021 (Open Decision — treatment of exactly 75%)
+
+### TC-023 Fully allocated candidate excluded
+- **Given** a candidate at 100% allocation (fully allocated)
+- **When** recommendations are generated
+- **Then** the candidate is excluded from all recommendations
+- **Trace:** REQ-022, BR-004 (Section 7 edge case)
+
+### TC-024 Workload above threshold reduces workload score **[TBD]**
+- **Given** a candidate exceeding the configured workload threshold
+- **When** the workload component is scored
+- **Then** the workload score contribution is reduced
+- **Trace:** REQ-023 (threshold TBD — Section 10)
+
+### TC-025 No full skill match returns best partial matches
+- **Given** no candidate matches all required skills for a role
+- **When** recommendations are generated
+- **Then** the highest-scoring eligible partial matches are recommended
+- **Trace:** REQ-024 (Section 7 edge case)
+
+### TC-026 Tie-break on equal scores **[TBD]**
+- **Given** two eligible candidates with equal suitability scores
+- **When** ranking is applied
+- **Then** the configured tie-break rule determines order
+- **Trace:** REQ-025 (tie-break rule TBD — Section 10)
+
+---
+
+## 4. Recommendation Results (REQ-026..REQ-034, BR-005..BR-007, BR-013)
+
+### TC-027 Candidates ordered by descending score
+- **Given** evaluation is complete for a role
+- **When** results are displayed
+- **Then** candidates appear in descending order of suitability score
+- **Trace:** REQ-026, BR-005
+
+### TC-028 Display suitability score per candidate
+- **Given** recommended candidates
+- **When** results are shown
+- **Then** each candidate's suitability score is displayed
+- **Trace:** REQ-027
+
+### TC-029 Score displayed as percentage 0–100%
+- **Given** a recommended candidate
+- **When** the score is displayed
+- **Then** it is presented as a percentage between 0% and 100%
+- **Trace:** REQ-027, BR-013
+
+### TC-030 Display matched required skills
+- **Given** recommended candidates
+- **When** results are shown
+- **Then** each candidate's matched required skills are displayed
+- **Trace:** REQ-028
+
+### TC-031 Display availability and workload percentages
+- **Given** recommended candidates
+- **When** results are shown
+- **Then** each candidate's availability % and workload % are displayed
+- **Trace:** REQ-029
+
+### TC-032 Display recommendation rationale
+- **Given** recommended candidates
+- **When** results are shown
+- **Then** a rationale is displayed for each candidate
+- **Trace:** REQ-030, BR-006
+
+### TC-033 Show at least three eligible candidates per role
+- **Given** a role with at least three eligible candidates
+- **When** results are shown
+- **Then** at least three candidates are displayed for that role
+- **Trace:** REQ-031, BR-007
+
+### TC-034 Fewer than three eligible candidates
+- **Given** a role with fewer than three eligible candidates
+- **When** results are shown
+- **Then** all eligible candidates for that role are displayed
+- **Trace:** REQ-032 (Section 7 edge case)
+
+### TC-035 Select an eligible candidate while displayed
+- **Given** recommendations are displayed
+- **When** the Delivery Lead selects an eligible candidate for a role
+- **Then** the selection is allowed
+- **Trace:** REQ-033
+
+### TC-036 No eligible candidate shows role unfilled
+- **Given** a role with no eligible candidate
+- **When** results are shown
+- **Then** the system displays the role as unfilled
+- **Trace:** REQ-034 (Section 7 edge case)
+
+---
+
+## 5. Proposed Squad Formation (REQ-035..REQ-042)
+
+### TC-037 Selecting a candidate adds to squad
+- **Given** displayed recommendations
+- **When** the Delivery Lead selects a candidate for a role
+- **Then** the candidate is added to the proposed squad for that role
+- **Trace:** REQ-035
+
+### TC-038 Replacing a candidate updates the squad
+- **Given** a role with a selected candidate
+- **When** the Delivery Lead replaces that candidate
+- **Then** the proposed squad is updated with the replacement
+- **Trace:** REQ-036
+
+### TC-039 Removing a candidate marks role unfilled
+- **Given** a role with a selected candidate
+- **When** the Delivery Lead removes the candidate
+- **Then** the associated role is marked unfilled
+- **Trace:** REQ-037
+
+### TC-040 Display filled and unfilled roles
+- **Given** a proposed squad in progress
+- **When** the squad is viewed
+- **Then** both filled and unfilled role requirements are displayed
+- **Trace:** REQ-038
+
+### TC-041 Display squad summary
+- **Given** a proposed squad
+- **When** the summary is viewed
+- **Then** each role and its selected candidate are shown
+- **Trace:** REQ-039
+
+### TC-042 Enable confirmation when all mandatory roles filled **[TBD]**
+- **Given** every mandatory role has a selected eligible candidate
+- **When** the Delivery Lead attempts confirmation
+- **Then** squad confirmation is enabled
+- **Trace:** REQ-040 (which roles are mandatory — Open Decision)
+
+### TC-043 Prevent confirmation when mandatory role unfilled **[TBD]**
+- **Given** one or more mandatory roles are unfilled
+- **When** the Delivery Lead attempts confirmation
+- **Then** confirmation is prevented
+- **Trace:** REQ-041 (Section 7 edge case)
+
+### TC-044 Confirm sets squad status to Confirmed
+- **Given** a proposed squad eligible for confirmation
+- **When** the Delivery Lead confirms
+- **Then** the squad status is set to Confirmed
+- **Trace:** REQ-042
+
+---
+
+## 6. Project History (REQ-043..REQ-048, BR-008..BR-009, BR-011)
+
+### TC-045 List completed mock projects
+- **Given** completed mock projects exist
+- **When** the Delivery Lead opens Project History
+- **Then** the list of completed projects is displayed
+- **Trace:** REQ-043
+
+### TC-046 History ordered by descending completion date
+- **Given** multiple historical projects
+- **When** the history list is displayed
+- **Then** projects appear in descending order of completion date
+- **Trace:** REQ-044, BR-008
+
+### TC-047 Display name, duration, completion date
+- **Given** the history list
+- **When** it is displayed
+- **Then** each project shows project name, duration, and completion date
+- **Trace:** REQ-045
+
+### TC-048 Select historical project shows details
+- **Given** the history list
+- **When** the Delivery Lead selects a historical project
+- **Then** its project details are displayed
+- **Trace:** REQ-046
+
+### TC-049 Display historical roles and squad members
+- **Given** a selected historical project
+- **When** its details are shown
+- **Then** the roles and previously assigned squad members are displayed
+- **Trace:** REQ-047
+
+### TC-050 Historical record is read-only
+- **Given** a historical project is displayed
+- **When** the Delivery Lead attempts to modify the historical record
+- **Then** the modification is prevented
+- **Trace:** REQ-048, BR-009 (Section 7 edge case)
+
+---
+
+## 7. Reuse Previous Project Requirements (REQ-049..REQ-053, BR-010)
+
+### TC-051 Initiate reuse from a historical project
+- **Given** a historical project is displayed
+- **When** the Delivery Lead initiates reuse of its role/skill requirements
+- **Then** the reuse action is allowed
+- **Trace:** REQ-049
+
+### TC-052 Reuse creates a populated new request
+- **Given** the Delivery Lead initiates reuse
+- **When** reuse executes
+- **Then** a new delivery request is created, populated with the historical role and skill requirements
+- **Trace:** REQ-050
+
+### TC-053 Edit reused request without altering history
+- **Given** a new request created from reused requirements
+- **When** the Delivery Lead edits the new request
+- **Then** the edits apply to the new request and the historical project remains unchanged
+- **Trace:** REQ-051, BR-009
+
+### TC-054 Reused request re-evaluates former members
+- **Given** a reused request is submitted
+- **When** evaluation runs
+- **Then** former squad members are re-evaluated against current mock availability and workload
+- **Trace:** REQ-052, BR-010
+
+### TC-055 Ineligible former member replaced by next best
+- **Given** a former squad member is now ineligible or unavailable
+- **When** recommendations are generated for that role
+- **Then** the next highest-scoring eligible candidate is recommended
+- **Trace:** REQ-053 (Section 7 edge case)
+
+---
+
+## 8. Report Generation (REQ-054..REQ-057)
+
+### TC-056 Generate Report action available on history details
+- **Given** historical project details are displayed
+- **When** the Delivery Lead views the screen
+- **Then** a Generate Report action is available
+- **Trace:** REQ-054
+
+### TC-057 Report contains project details, roles, squad
+- **Given** historical project details are displayed
+- **When** the Delivery Lead selects Generate Report
+- **Then** a report is generated containing the displayed project details, roles, and squad members
+- **Trace:** REQ-055
+
+### TC-058 Successful report available for download **[TBD]**
+- **Given** report generation succeeds
+- **When** generation completes
+- **Then** the report is available for download in the configured report format
+- **Trace:** REQ-056 (report format — Open Decision)
+
+### TC-059 Report generation failure handling
+- **Given** report generation fails
+- **When** the failure occurs
+- **Then** an error message is displayed and the historical project details remain on screen
+- **Trace:** REQ-057 (Section 7 edge case)
+
+---
+
+## 9. Business Rule Verification (BR-001..BR-014)
+
+### TC-060 Weight sum equals 100%
+- **Given** the scoring model
+- **When** weights are applied
+- **Then** Skill 60% + Availability 30% + Workload 10% = 100%
+- **Trace:** BR-001, BR-002, BR-003
+
+### TC-061 No AI/ML — deterministic output
+- **Given** identical request and identical mock data
+- **When** evaluation runs multiple times
+- **Then** the recommendation output is identical each time (deterministic, rules-based)
+- **Trace:** BR-014
+
+### TC-062 Mock data only for history
+- **Given** the project history feature
+- **When** historical data is displayed
+- **Then** it originates solely from mock data (no real HR integration)
+- **Trace:** BR-011
+
+---
+
+## 10. Traceability Coverage Summary
+
+| Workflow stage | Requirements | Test cases |
+|---|---|---|
+| End-to-end scenarios | REQ-002..REQ-008 | TC-E2E-001..TC-E2E-004 |
+| Create and capture request | REQ-001..REQ-008 | TC-001..TC-007 |
+| Add roles and skills | REQ-009..REQ-014 | TC-008..TC-014 |
+| Find and score candidates | REQ-015..REQ-025 | TC-015..TC-026 |
+| Review recommendations | REQ-026..REQ-034 | TC-027..TC-036 |
+| Build and confirm squad | REQ-035..REQ-042 | TC-037..TC-044 |
+| View project history | REQ-043..REQ-048 | TC-045..TC-050 |
+| Reuse historical requirements | REQ-049..REQ-053 | TC-051..TC-055 |
+| Generate report | REQ-054..REQ-057 | TC-056..TC-059 |
+| Business rules | BR-001..BR-014 | TC-018, TC-020, TC-023, TC-027, TC-029, TC-032, TC-033, TC-046, TC-050, TC-054, TC-060..TC-062 |
+
+## 11. Cases Blocked by Open Decisions (Section 10)
+
+These cannot be fully baselined until values are agreed:
+
+- **Score normalization / rounding** — affects TC-018, TC-021, TC-024, TC-029
+- **Workload threshold** — TC-024
+- **Availability treatment at exactly 75%** — TC-022
+- **Tie-break rule** — TC-026
+- **Mandatory vs optional roles** — TC-042, TC-043
+- **Report format/filename/metadata** — TC-058
+- **One person filling multiple roles** — not yet covered (needs a decision before a case can be written)
+- **Field length limits** — boundary cases for name/description/role/skill not yet writable
+- **Confirmation reopen behaviour** — post-confirmation case not yet writable
+</script>
+
+<script id="md-plan" type="text/markdown"># Test Plan: Rapid Assembly of Cross-Functional Delivery Squads
+
+## Document Control
+
+| Field | Value |
+|---|---|
+| Document title | Test Plan — Rapid Assembly of Cross-Functional Delivery Squads |
+| Owner | Test Architect |
+| Audience | Delivery team, UI/UX, API Designer, Architect, Test Architect, Harness Engineer |
+| Status | Draft (aligned to Requirements draft baseline) |
+| Source requirements | EARS requirements (REQ-001..REQ-057, BR-001..BR-014) |
+| Source test cases | QETesting/delivery-squad-test-cases.md (TC-E2E-001..004, TC-001..TC-062) |
+| Related | Sample mock data (Appendix A of requirements) |
+
+---
+
+## 1. Introduction
+
+This test plan defines the scope, approach, resources, and schedule for verifying the Delivery Squad Assembly solution. The solution lets a Delivery Lead capture a delivery need and receive transparent, rules-based candidate recommendations from a mock employee pool, then form and confirm a proposed squad.
+
+The plan governs execution of the test cases documented in delivery-squad-test-cases.md and traces coverage back to the EARS requirements and business rules.
+
+## 2. Objectives
+
+- Verify each EARS functional requirement (REQ-001..REQ-057) has passing coverage.
+- Verify each business rule (BR-001..BR-014) is enforced.
+- Confirm deterministic, rules-based scoring (no AI/ML) with the 60/30/10 weighting.
+- Confirm validation, edge-case, and negative-path handling from Section 7 of the requirements.
+- Establish a traceability record from requirement to test case to result.
+
+## 3. Scope
+
+### 3.1 In Scope
+
+| Area | Requirements | Test cases |
+|---|---|---|
+| End-to-end workflow scenarios | REQ-002..REQ-008 | TC-E2E-001..TC-E2E-004 |
+| Delivery request creation & validation | REQ-001..REQ-008 | TC-001..TC-007 |
+| Role and skill management | REQ-009..REQ-014 | TC-008..TC-014 |
+| Candidate matching and scoring | REQ-015..REQ-025 | TC-015..TC-026 |
+| Recommendation results | REQ-026..REQ-034 | TC-027..TC-036 |
+| Proposed squad formation | REQ-035..REQ-042 | TC-037..TC-044 |
+| Project history | REQ-043..REQ-048 | TC-045..TC-050 |
+| Reuse previous requirements | REQ-049..REQ-053 | TC-051..TC-055 |
+| Report generation | REQ-054..REQ-057 | TC-056..TC-059 |
+| Business rule verification | BR-001..BR-014 | TC-060..TC-062 (+ cross-referenced cases) |
+
+### 3.2 Out of Scope
+
+- Real HR integration, Outlook integration, Teams integration
+- Leave management
+- AI or machine-learning based matching
+- Production deployment and performance/load testing
+- Security/penetration testing (not defined in current requirements baseline)
+
+## 4. Test Approach / Strategy
+
+- **Method:** Behaviour-driven, Given/When/Then cases executed against mock data.
+- **Levels:**
+- Functional — per-requirement behaviour (majority of cases).
+- Rule verification — deterministic scoring math and weighting (BR-001..BR-003, BR-012, BR-014).
+- Validation / negative — Section 7 edge cases (invalid dates, missing fields, empty skills, full allocation, no eligible candidate, report failure).
+- Boundary — availability at exactly 75%, fewer-than-three candidates, min/max squad sizes.
+- **Test types:** Positive (happy path), negative, boundary, and end-to-end workflow scenarios.
+- **Data-driven:** Scoring cases use controlled mock candidates with known skill/availability/workload values so expected scores are computable once the normalization rules are agreed.
+- **Determinism check:** Repeated runs on identical inputs must produce identical output (BR-014).
+
+## 5. Test Environment
+
+Per project steering (static, dependency-free front end):
+
+- **Application under test:** Browser-based UI, no backend/persistence; mock datasets only.
+- **Browsers:** Latest Chrome and Edge (baseline); others as agreed.
+- **Data:** Mock employee, availability, workload, and historical project data (requirements Appendix A). TBD values in the sample data must be supplied before scoring cases run.
+- **Tooling:** No build/test tooling currently configured. If automation is added, prefer a lightweight, dependency-minimal approach placed under QETesting/.
+
+## 6. Test Data Requirements
+
+- Mock employee pool with a mix of roles, skills, availability %, and workload %.
+- At least one fully allocated (100%) candidate — TC-023.
+- A role with 3+ eligible candidates and a role with fewer than 3 — TC-033, TC-034.
+- Candidates with equal suitability scores — TC-026.
+- Candidates with partial-only skill matches — TC-025.
+- Multiple completed historical projects with differing completion dates — TC-046.
+- A historical squad member who is now unavailable/ineligible — TC-055.
+- **Blocking:** TBD availability/workload values in Appendix A must be populated; these shall not be inferred by the system.
+
+## 7. Entry Criteria
+
+- Requirements baseline reviewed and agreed by the delivery team.
+- Mock datasets loaded, including previously TBD values.
+- Test environment (browser + application build) available.
+- Test cases in delivery-squad-test-cases.md reviewed.
+- Open Decisions (Section 10 of requirements) resolved for cases marked **[TBD]**.
+
+## 8. Exit Criteria
+
+- 100% of in-scope, non-blocked test cases executed.
+- All Priority 1 (critical/happy-path and rule-enforcement) cases pass.
+- No open Severity 1 or Severity 2 defects.
+- All **[TBD]** cases either executed (decisions resolved) or formally deferred with sign-off.
+- Traceability matrix shows every REQ and BR mapped to at least one executed case.
+
+## 9. Test Case Prioritisation
+
+| Priority | Description | Example cases |
+|---|---|---|
+| P1 – Critical | Core workflow and rule enforcement | TC-E2E-001, TC-001, TC-004, TC-015, TC-018, TC-023, TC-027, TC-037, TC-044, TC-060, TC-061 |
+| P2 – High | Supporting behaviour and key validation | TC-005..TC-014, TC-024..TC-036, TC-038..TC-043 |
+| P3 – Medium | History, reuse, reporting | TC-045..TC-059 |
+| P4 – Low / Deferred | Blocked by Open Decisions | TC-021, TC-022, TC-026, TC-042, TC-043, TC-058 |
+
+## 10. Traceability Matrix
+
+| Workflow stage | Requirements | Business rules | Test cases |
+|---|---|---|---|
+| End-to-end scenarios | REQ-002..REQ-008 | — | TC-E2E-001..TC-E2E-004 |
+| Create and capture request | REQ-001..REQ-008 | — | TC-001..TC-007 |
+| Add roles and skills | REQ-009..REQ-014 | — | TC-008..TC-014 |
+| Find and score candidates | REQ-015..REQ-025 | BR-001..BR-004, BR-012 | TC-015..TC-026 |
+| Review recommendations | REQ-026..REQ-034 | BR-005..BR-007, BR-013 | TC-027..TC-036 |
+| Build and confirm squad | REQ-035..REQ-042 | — | TC-037..TC-044 |
+| View project history | REQ-043..REQ-048 | BR-008, BR-009, BR-011 | TC-045..TC-050 |
+| Reuse historical requirements | REQ-049..REQ-053 | BR-010 | TC-051..TC-055 |
+| Generate report | REQ-054..REQ-057 | — | TC-056..TC-059 |
+| Cross-cutting rules | — | BR-001..BR-003, BR-011, BR-014 | TC-060..TC-062 |
+
+## 11. Risks and Mitigations
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Open Decisions (Section 10) unresolved | Scoring/boundary cases not baselinable | Track as **[TBD]**; block only affected cases; escalate for decision |
+| TBD mock data missing | Scoring cases cannot compute expected results | Require complete mock dataset at entry |
+| Ambiguous normalization/tie-break rules | Non-repeatable expected values | Confirm formulas before P1 scoring cases run |
+| No test tooling configured | Manual-only execution, slower regression | Consider lightweight harness under QETesting/ if scope grows |
+| Mandatory-vs-optional roles undefined | Confirmation cases ambiguous | Resolve before TC-042/TC-043 |
+
+## 12. Deliverables
+
+- This test plan.
+- Test case catalogue (delivery-squad-test-cases.md).
+- Executed test results / run log.
+- Defect list with severity/priority.
+- Updated traceability matrix with pass/fail status.
+
+## 13. Open Items Blocking Full Baseline
+
+Carried from requirements Section 10 and test-cases Section 11:
+
+- Score normalization / rounding precision — TC-018, TC-021, TC-024, TC-029
+- Workload threshold — TC-024
+- Availability treatment at exactly 75% — TC-022
+- Tie-break rule — TC-026
+- Mandatory vs optional roles — TC-042, TC-043
+- Report format / filename / metadata — TC-058
+- One person filling multiple roles — no case yet
+- Field length limits — boundary cases not yet writable
+- Confirmation reopen behaviour — post-confirmation case not yet writable
+</script>
+
+<script>
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function inline(s){
+  s = escapeHtml(s);
+  s = s.replace(/`([^`]+)`/g,'<code>$1</code>');
+  s = s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  return s;
+}
+function renderMarkdown(md){
+  const lines = md.replace(/\r\n/g,'\n').split('\n');
+  let html = '', i = 0;
+  while(i < lines.length){
+    let line = lines[i];
+    if(/^\s*\|/.test(line) && i+1 < lines.length && /^\s*\|?[\s:-]+\|/.test(lines[i+1])){
+      const header = line.trim().replace(/^\||\|$/g,'').split('|').map(c=>c.trim());
+      i += 2;
+      let rows = [];
+      while(i < lines.length && /^\s*\|/.test(lines[i])){
+        rows.push(lines[i].trim().replace(/^\||\|$/g,'').split('|').map(c=>c.trim()));
+        i++;
+      }
+      html += '<table><thead><tr>' + header.map(h=>'<th>'+inline(h)+'</th>').join('') + '</tr></thead><tbody>';
+      html += rows.map(r=>'<tr>'+r.map(c=>'<td>'+inline(c)+'</td>').join('')+'</tr>').join('');
+      html += '</tbody></table>';
+      continue;
+    }
+    if(/^### /.test(line)){ html += '<h3>'+inline(line.slice(4))+'</h3>'; i++; continue; }
+    if(/^## /.test(line)){ html += '<h2>'+inline(line.slice(3))+'</h2>'; i++; continue; }
+    if(/^# /.test(line)){ html += '<h1>'+inline(line.slice(2))+'</h1>'; i++; continue; }
+    if(/^---+\s*$/.test(line)){ html += '<hr/>'; i++; continue; }
+    if(/^>\s?/.test(line)){
+      let buf = [];
+      while(i < lines.length && /^>\s?/.test(lines[i])){ buf.push(lines[i].replace(/^>\s?/,'')); i++; }
+      html += '<blockquote>'+inline(buf.join(' '))+'</blockquote>';
+      continue;
+    }
+    if(/^\s*-\s+/.test(line)){
+      html += '<ul>';
+      while(i < lines.length && /^\s*-\s+/.test(lines[i])){
+        let item = lines[i].replace(/^\s*-\s+/,'');
+        i++;
+        while(i < lines.length && /^\s{2,}\S/.test(lines[i]) && !/^\s*-\s+/.test(lines[i])){
+          item += ' ' + lines[i].trim(); i++;
+        }
+        html += '<li>'+inline(item)+'</li>';
+      }
+      html += '</ul>';
+      continue;
+    }
+    if(line.trim() === ''){ i++; continue; }
+    html += '<p>'+inline(line)+'</p>'; i++;
+  }
+  return html;
+}
+
+const docs = {
+  cases: document.getElementById('md-cases').textContent,
+  plan:  document.getElementById('md-plan').textContent
+};
+const content = document.getElementById('content');
+const sel = document.getElementById('doc');
+
+function load(key){
+  content.innerHTML = renderMarkdown(docs[key]);
+  document.title = (key==='cases'?'Test Cases':'Test Plan') + ' — Delivery Squad';
+}
+sel.addEventListener('change', ()=>load(sel.value));
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+load('cases');
+</script>
+</body>
+</html>

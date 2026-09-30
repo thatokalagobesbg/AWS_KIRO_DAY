@@ -1,0 +1,149 @@
+// Prisma Schema for Squadly - Squad Assembly Tool
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Reference Data Tables
+// ============================================
+
+// Roles that can be assigned (Feature Analyst, Frontend Dev, etc.)
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique  // e.g., "Frontend Developer"
+  code      String   @unique  // e.g., "FE"
+  createdAt DateTime @default(now())
+
+  // Relations
+  skills            RoleSkill[]
+  employees         Employee[]
+  projectRoles      ProjectRole[]
+}
+
+// Skills that employees can have
+model Skill {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique  // e.g., "React", "TypeScript"
+  createdAt DateTime @default(now())
+
+  // Relations
+  roles             RoleSkill[]
+  employees         EmployeeSkill[]
+  projectRoleSkills ProjectRoleSkill[]
+}
+
+// Many-to-many: Which skills belong to which roles
+model RoleSkill {
+  id      Int   @id @default(autoincrement())
+  roleId  Int
+  skillId Int
+
+  role  Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, skillId])
+}
+
+// ============================================
+// Employee Data
+// ============================================
+
+// Mock employees in the talent pool
+model Employee {
+  id             String   @id  // e.g., "EMP001"
+  name           String
+  roleId         Int
+  availableHours Int      @default(40)  // 0-40 hours per week
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  role            Role              @relation(fields: [roleId], references: [id])
+  skills          EmployeeSkill[]
+  projectMembers  ProjectMember[]
+}
+
+// Many-to-many: Which skills each employee has
+model EmployeeSkill {
+  id         Int    @id @default(autoincrement())
+  employeeId String
+  skillId    Int
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  skill    Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, skillId])
+}
+
+// ============================================
+// Project Data
+// ============================================
+
+// Projects created by delivery leads
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  urgency     String   // "LOW", "MEDIUM", "HIGH"
+  startDate   DateTime
+  endDate     DateTime
+  status      String   @default("DRAFT")  // "DRAFT", "ACTIVE", "COMPLETED"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  roles   ProjectRole[]
+  members ProjectMember[]
+}
+
+// Roles required for a project (with their required skills)
+model ProjectRole {
+  id        Int @id @default(autoincrement())
+  projectId Int
+  roleId    Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  role    Role    @relation(fields: [roleId], references: [id])
+
+  // Relations
+  requiredSkills ProjectRoleSkill[]
+  members        ProjectMember[]
+
+  @@unique([projectId, roleId])
+}
+
+// Skills required for a specific project role
+model ProjectRoleSkill {
+  id            Int @id @default(autoincrement())
+  projectRoleId Int
+  skillId       Int
+
+  projectRole ProjectRole @relation(fields: [projectRoleId], references: [id], onDelete: Cascade)
+  skill       Skill       @relation(fields: [skillId], references: [id])
+
+  @@unique([projectRoleId, skillId])
+}
+
+// Employees assigned to a project (selected squad members)
+model ProjectMember {
+  id            Int      @id @default(autoincrement())
+  projectId     Int
+  projectRoleId Int
+  employeeId    String
+  matchScore    Float?   // Calculated score at time of assignment
+  rationale     String?  // Why they were recommended
+  selected      Boolean  @default(true)  // true = confirmed member, false = potential
+  createdAt     DateTime @default(now())
+
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectRole ProjectRole @relation(fields: [projectRoleId], references: [id], onDelete: Cascade)
+  employee    Employee    @relation(fields: [employeeId], references: [id])
+
+  @@unique([projectId, employeeId])
+}

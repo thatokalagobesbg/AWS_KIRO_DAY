@@ -1,0 +1,8 @@
+name: TypeScript Check
+description: Run TypeScript type checking before commits
+trigger:
+  - type: file-saved
+    pattern: "**/*.{ts,tsx}"
+action:
+  type: shell
+  command: "cd client && npx tsc --noEmit"

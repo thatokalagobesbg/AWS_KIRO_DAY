@@ -1,0 +1,8 @@
+name: Server TypeScript Check
+description: Type check server code on save
+trigger:
+  - type: file-saved
+    pattern: "server/**/*.ts"
+action:
+  type: shell
+  command: "cd server && npx tsc --noEmit"

@@ -1,0 +1,214 @@
+
+
+Squad Recommendation API
+Reference Data
+Get Skills
+GET /api/skills
+
+Response
+{
+  "skills": [
+    {
+      "skillId": 1,
+      "skillName": "Java"
+    },
+    {
+      "skillId": 2,
+      "skillName": "Azure"
+    }
+  ]
+}
+
+Get Roles
+GET /api/roles
+
+Response
+{
+  "roles": [
+    {
+      "roleId": 1,
+      "roleName": "Developer"
+    },
+    {
+      "roleId": 2,
+      "roleName": "Business Analyst"
+    }
+  ]
+}
+
+Evaluate Squad Recommendations
+Endpoint
+POST /api/requests/evaluate
+
+Request
+{
+  "urgency": "High",
+  "startDate": "2026-10-01",
+  "endDate": "2026-12-31",
+  "roles": [
+    {
+      "roleId": 1,
+      "skills": [101, 102, 103]
+    },
+    {
+      "roleId": 2,
+      "skills": [201, 202]
+    }
+  ]
+}
+
+Response
+{
+  "recommendedMembers": [
+    {
+      "empId": "12345",
+      "empName": "John Smith",
+      "role": "Developer",
+      "capacity": 80,
+      "availability": "Available",
+      "ranking": 1,
+      "matchScore": 95,
+      "rationale": "Strong match for required skills and availability.",
+      "skills": [
+        "Java",
+        "Azure",
+        "SQL"
+      ]
+    }
+  ]
+}
+
+Create Project
+Endpoint
+POST /api/projects
+
+Request
+{
+  "projectName": "Digital Transformation",
+  "projectDescription": "Migration of legacy applications.",
+  "urgency": "High",
+  "startDate": "2026-10-01",
+  "endDate": "2026-12-31",
+  "projectMembers": [
+    {
+      "empId": "12345",
+      "selected": true
+    }
+  ]
+}
+
+Response
+{
+  "projectId": 1001,
+  "projectName": "Digital Transformation",
+  "projectDescription": "Migration of legacy applications.",
+  "urgency": "High",
+  "startDate": "2026-10-01",
+  "endDate": "2026-12-31",
+  "projectMembers": [
+    {
+      "empId": "12345",
+      "empName": "John Smith",
+      "role": "Developer",
+      "capacity": 80,
+      "availability": "Available",
+      "ranking": 1,
+      "matchScore": 95,
+      "rationale": "Strong match for required skills.",
+      "skills": ["Java", "Azure", "SQL"]
+    }
+  ],
+  "potentialMembers": [
+    {
+      "empId": "67890",
+      "empName": "Jane Doe",
+      "role": "Developer",
+      "capacity": 70,
+      "availability": "Available",
+      "ranking": 2,
+      "matchScore": 89,
+      "rationale": "Good skill match with moderate capacity.",
+      "skills": ["Java", "Azure"]
+    }
+  ]
+}
+
+Update Project
+Endpoint
+PUT /api/projects/{projectId}
+
+Request
+{
+  "projectName": "Digital Transformation",
+  "projectDescription": "Updated project scope.",
+  "urgency": "Medium",
+  "startDate": "2026-10-15",
+  "endDate": "2027-01-31",
+  "projectMembers": [
+    {
+      "empId": "12345",
+      "selected": true
+    }
+  ]
+}
+
+Response
+{
+  "message": "Project updated successfully"
+}
+
+Get Project History
+Endpoint
+GET /api/projects
+
+Response
+{
+  "projects": [
+    {
+      "projectId": 1001,
+      "projectName": "Digital Transformation",
+      "urgency": "High",
+      "startDate": "2026-10-01",
+      "endDate": "2026-12-31",
+      "status": "Active"
+    }
+  ]
+}
+
+Get Project Details
+Endpoint
+GET /api/projects/{projectId}
+
+Response
+{
+  "projectId": 1001,
+  "projectName": "Digital Transformation",
+  "projectDescription": "Migration of legacy applications.",
+  "urgency": "High",
+  "startDate": "2026-10-01",
+  "endDate": "2026-12-31",
+  "projectMembers": [],
+  "potentialMembers": []
+}
+
+API Structure:
+--form dropdowns
+GET    /api/skills
+GET    /api/roles
+
+--recommend members
+POST   /api/requests/evaluate
+
+--create project with created members
+POST   /api/projects
+
+--dashboard
+GET    /api/projects
+
+-- project details
+GET    /api/projects/{projectId}
+
+-- update project details or members
+PUT    /api/projects/{projectId}
+
+

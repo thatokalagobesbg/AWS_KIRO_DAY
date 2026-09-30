@@ -1,0 +1,8 @@
+name: Test Runner
+description: Run tests for affected files
+trigger:
+  - type: file-saved
+    pattern: "**/*.{ts,tsx}"
+action:
+  type: shell
+  command: "npm test -- --run --passWithNoTests"
